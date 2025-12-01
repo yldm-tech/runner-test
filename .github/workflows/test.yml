@@ -1,0 +1,66 @@
+name: Test Self-Hosted Runner
+
+  on:
+    push:
+      branches: [ main ]
+    pull_request:
+      branches: [ main ]
+    workflow_dispatch:
+
+  jobs:
+    test-runner:
+      runs-on: [self-hosted, macOS]
+
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Display system information
+          run: |
+            echo "=== System Information ==="
+            echo "Hostname: $(hostname)"
+            echo "OS: $(uname -s)"
+            echo "Architecture: $(uname -m)"
+            echo "macOS Version: $(sw_vers -productVersion)"
+            echo ""
+
+        - name: Display environment
+          run: |
+            echo "=== Environment ==="
+            echo "User: $(whoami)"
+            echo "Home: $HOME"
+            echo "Path: $PATH"
+            echo "Working Directory: $(pwd)"
+            echo ""
+
+        - name: Test Node.js
+          run: |
+            echo "=== Node.js Information ==="
+            if command -v node &> /dev/null; then
+              echo "Node.js version: $(node --version)"
+              echo "npm version: $(npm --version)"
+            else
+              echo "Node.js not found"
+            fi
+            echo ""
+
+        - name: Test Python
+          run: |
+            echo "=== Python Information ==="
+            if command -v python3 &> /dev/null; then
+              echo "Python version: $(python3 --version)"
+            else
+              echo "Python3 not found"
+            fi
+            echo ""
+
+        - name: List directory contents
+          run: |
+            echo "=== Repository Contents ==="
+            ls -la
+
+        - name: Run simple calculation
+          run: |
+            echo "=== Simple Test ==="
+            echo "2 + 2 = $((2 + 2))"
+            echo "✅ Test completed successfully!"

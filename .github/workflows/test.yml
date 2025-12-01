@@ -33,7 +33,56 @@ jobs:
             echo "Working Directory: $(pwd)"
             echo ""
 
-        - name: Test Node.js
+        - name: Test Xcode
+          run: |
+            echo "=== Xcode Information ==="
+            if command -v xcodebuild &> /dev/null; then
+              xcodebuild -version
+              echo ""
+              echo "Available SDKs:"
+              xcodebuild -showsdks
+              echo ""
+              echo "Installed Simulators:"
+              xcrun simctl list devices available | grep -v "unavailable"
+            else
+              echo "Xcode not found"
+            fi
+            echo ""
+
+        - name: Test Swift
+          run: |
+            echo "=== Swift Information ==="
+            if command -v swift &> /dev/null; then
+              swift --version
+              echo ""
+              echo "Swift Package Manager:"
+              swift package --version
+            else
+              echo "Swift not found"
+            fi
+            echo ""
+
+        - name: Test CocoaPods
+          run: |
+            echo "=== CocoaPods Information ==="
+            if command -v pod &> /dev/null; then
+              echo "CocoaPods version: $(pod --version)"
+            else
+              echo "CocoaPods not installed"
+            fi
+            echo ""
+
+        - name: Test Fastlane
+          run: |
+            echo "=== Fastlane Information ==="
+            if command -v fastlane &> /dev/null; then
+              fastlane --version
+            else
+              echo "Fastlane not installed"
+            fi
+            echo ""
+
+        - name: Test Node.js (for React Native)
           run: |
             echo "=== Node.js Information ==="
             if command -v node &> /dev/null; then
@@ -41,16 +90,6 @@ jobs:
               echo "npm version: $(npm --version)"
             else
               echo "Node.js not found"
-            fi
-            echo ""
-
-        - name: Test Python
-          run: |
-            echo "=== Python Information ==="
-            if command -v python3 &> /dev/null; then
-              echo "Python version: $(python3 --version)"
-            else
-              echo "Python3 not found"
             fi
             echo ""
 
